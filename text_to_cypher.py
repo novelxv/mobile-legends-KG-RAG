@@ -14,7 +14,9 @@ class TextToCypher:
             max_new_tokens=256,
             return_full_text=False
         )[0]
-        return output["generated_text"]
+        generated_text = output["generated_text"]
+        generated_text = generated_text.replace(r"\n", "\n")
+        return generated_text
 
 if __name__ == "__main__":
     schema = """
