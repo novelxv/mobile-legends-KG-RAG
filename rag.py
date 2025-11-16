@@ -3,24 +3,8 @@ from response_generator import ResponseGenerator
 from text_to_cypher import TextToCypher
 
 with GraphDatabaseDriver() as driver:
-    schema = """
-Node properties:
-- **Player**
-- accountId: INTEGER
-- username: STRING Example: "Nicki1202"
-- **Level**
-- id: INTEGER
-- name: STRING Example: "OuterSpace"
-- **Comment**
-- id: INTEGER
-- content: STRING Example: "GG! Nice level:)"
-Relationship properties:
-
-The relationships:
-(:Player)-[:SHARES]->(:Level)
-(:Player)-[:SUBMITS]->(:Comment)
-(:Level)-[:HAS]->(:Comment)
-    """.strip()
+    with open("schema_example.txt") as fp:
+        schema = fp.read().strip()
 
     print("Preparing text-to-Cypher pipeline ....")
     ttc = TextToCypher(schema)

@@ -62,24 +62,8 @@ class ResponseGenerator:
         return response[0]
 
 if __name__ == "__main__":
-    schema = """
-Node properties:
-- **Player**
-- accountId: INTEGER
-- username: STRING Example: "Nicki1202"
-- **Level**
-- id: INTEGER
-- name: STRING Example: "OuterSpace"
-- **Comment**
-- id: INTEGER
-- content: STRING Example: "GG! Nice level:)"
-Relationship properties:
-
-The relationships:
-(:Player)-[:SHARES]->(:Level)
-(:Player)-[:SUBMITS]->(:Comment)
-(:Level)-[:HAS]->(:Comment)
-    """.strip()
+    with open("schema_example.txt") as fp:
+        schema = fp.read().strip()
 
     print("Preparing pipeline ....")
     generator = ResponseGenerator(schema)
