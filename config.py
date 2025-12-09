@@ -14,7 +14,12 @@ class Config:
     def get_neo4j_database_name(self):
         neo4j_data = self._data["neo4j"]
         return neo4j_data["database_name"]
+    
+    def get_gemini_api_key(self):
+        gemini_data = self._data.get("gemini", {})
+        return gemini_data.get("api_key")
 
 def load_config(toml_path: str = "config.toml"):
     with open(toml_path, mode="rb") as fp:
         return Config(tomllib.load(fp))
+

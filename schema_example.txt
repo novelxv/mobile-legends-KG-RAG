@@ -1,16 +1,23 @@
-Node properties:
-- **Player**
-- accountId: INTEGER
-- username: STRING Example: "Nicki1202"
-- **Level**
-- id: INTEGER
-- name: STRING Example: "OuterSpace"
-- **Comment**
-- id: INTEGER
-- content: STRING Example: "GG! Nice level:)"
-Relationship properties:
+=== NODE PROPERTIES ===
+- **:`DamageType`**
+  - id: String
+- **:`Hero`**
+  - id: String
+  - name: String
+- **:`Lane`**
+  - id: String
+  - name: String
+- **:`Role`**
+  - id: String
+  - name: String
+- **:`Specialty`**
+  - id: String
+  - name: String
 
-The relationships:
-(:Player)-[:SHARES]->(:Level)
-(:Player)-[:SUBMITS]->(:Comment)
-(:Level)-[:HAS]->(:Comment)
+=== RELATIONSHIPS ===
+(:Hero)-[:COMPATIBLE_WITH]->(:Hero)
+(:Hero)-[:COUNTERS]->(:Hero)
+(:Hero)-[:HAS_DAMAGE_TYPE]->(:DamageType)
+(:Hero)-[:HAS_ROLE]->(:Role)
+(:Hero)-[:HAS_SPECIALTY]->(:Specialty)
+(:Hero)-[:HAS_LANE]->(:Lane)
