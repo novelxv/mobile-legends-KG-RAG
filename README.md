@@ -17,28 +17,28 @@ AI-powered Mobile Legends hero information system using Knowledge Graph + RAG (R
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    User Question                             │
-│          "Who are the best marksman heroes?"                 │
+│                    User Question                            │
+│              "List all marksman heroes!"                    │
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              Text-to-Cypher (Gemini 2.5)                     │
-│  Question → Cypher Query                                     │
-│  MATCH (h:Hero)-[:HAS_ROLE]->(r:Role {name: 'marksman'})   │
+│              Text-to-Cypher (Gemini 2.5)                    │
+│  Question → Cypher Query                                    │
+│  MATCH (h:Hero)-[:HAS_ROLE]->(r:Role {name: 'marksman'})    │
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   Neo4j Graph Database                       │
-│  Execute query & retrieve hero data                          │
+│                   Neo4j Graph Database                      │
+│            Execute query & retrieve hero data               │
 └────────────────────┬────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
-│           Response Generator (Gemini 2.5)                    │
-│  Query Results → Natural Language Response                   │
-│  "Here are the top marksman heroes: Layla, Miya..."         │
+│           Response Generator (Gemini 2.5)                   │
+│  Query Results → Natural Language Response                  │
+│  "Here are the list of marksman heroes: Layla, Miya..."     │
 └─────────────────────────────────────────────────────────────┘
 ```
 
