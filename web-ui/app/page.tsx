@@ -126,15 +126,15 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-ml-accent via-yellow-500 to-ml-orange 
-                            flex items-center justify-center shadow-ml animate-glow">
-                <span className="text-3xl">⚔️</span>
+                            flex items-center justify-center shadow-ml animate-glow overflow-hidden">
+                <img src="/mobile-legends-logo.png" alt="Mobile Legends Logo" className="w-full h-full object-cover" />
               </div>
               <div>
                 <h1 className="text-4xl md:text-5xl font-heading font-bold glow-text bg-gradient-to-r from-ml-accent via-yellow-300 to-ml-accent bg-clip-text text-transparent">
                   MOBILE LEGENDS
                 </h1>
                 <p className="text-ml-cyan text-sm md:text-base font-semibold tracking-wide uppercase">
-                  Knowledge Graph AI System
+                  Knowledge Graph & RAG AI System
                 </p>
               </div>
             </div>
@@ -305,7 +305,7 @@ export default function Home() {
                 </button>
               </div>
               <p className="text-xs text-ml-light/50 mt-2 text-center">
-                Made by Kelompok T • Knowledge Graph AI System
+                Knowledge Graph & RAG AI System
               </p>
             </div>
           </div>

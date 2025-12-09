@@ -5,10 +5,9 @@
 @layer base {
   body {
     @apply bg-ml-darker text-ml-light font-ml;
-    background-image: 
-      radial-gradient(circle at 20% 50%, rgba(77, 166, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(244, 196, 48, 0.05) 0%, transparent 50%),
-      linear-gradient(180deg, #05070f 0%, #0a0e1a 100%);
+    background-image: url('/bg_ml.png');
+    background-size: cover;
+    background-position: center;
     background-attachment: fixed;
   }
 }
