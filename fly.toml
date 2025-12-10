@@ -8,6 +8,12 @@ primary_region = 'sin'
 
 [build]
 
+[env]
+  PORT = "8000"
+
+[experimental]
+  cmd = ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8000"]
+
 [http_service]
   internal_port = 8000
   force_https = true
