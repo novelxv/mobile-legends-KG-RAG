@@ -47,11 +47,11 @@ const LANE_COLORS = {
 };
 
 const LANE_LABELS = {
-  gold: '💰 Gold',
-  jungle: '🌳 Jungle',
-  roam: '👥 Roam',
-  mid: '⚡ Mid',
-  exp: '🔥 Exp',
+  gold: 'Gold',
+  jungle: 'Jungle',
+  roam: 'Roam',
+  mid: 'Mid',
+  exp: 'Exp',
 };
 
 export default function DraftPage() {
@@ -60,6 +60,7 @@ export default function DraftPage() {
   const [enemy, setEnemy] = useState<string[]>([]);
   const [team, setTeam] = useState<string[]>([]);
   const [userLane, setUserLane] = useState<string>('gold');
+  const [teamLaneInput, setTeamLaneInput] = useState<string>('gold');
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [teamAnalysis, setTeamAnalysis] = useState<TeamAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
@@ -101,6 +102,65 @@ export default function DraftPage() {
     }
   };
 
+  const handleTeamInput = (input: string) => {
+    const parts = input.toLowerCase().split(' ').filter(p => p);
+    if (parts.length !== 2) {
+      alert('Format salah! Gunakan: hero lane (contoh: miya gold)');
+      return;
+    }
+
+    const [heroName, lane] = parts;
+    
+    // Validate lane
+    if (!LANES.includes(lane)) {
+      alert(`Lane tidak valid! Gunakan: ${LANES.join(', ')}`);
+      return;
+    }
+
+    // Check if hero exists
+    const heroExists = heroes.some(h => h.name.toLowerCase() === heroName);
+    if (!heroExists) {
+      alert('Hero tidak ditemukan!');
+      return;
+    }
+
+    // Check if hero is already in any list
+    if (banned.includes(heroName) || enemy.includes(heroName) || team.some(h => h.startsWith(heroName))) {
+      alert('Hero sudah dipilih!');
+      return;
+    }
+
+    // Check if lane is already taken
+    const laneExists = team.some(h => h.endsWith(`-${lane}`));
+    if (laneExists) {
+      alert(`Lane ${lane} sudah ada! Pilih lane lain.`);
+      return;
+    }
+
+    // Add to team
+    setTeam([...team, `${heroName}-${lane}`]);
+    setSearchQuery('');
+  };
+
+  const addHeroWithLane = (heroName: string, lane: string) => {
+    // Check if hero is already in any list
+    if (banned.includes(heroName) || enemy.includes(heroName) || team.some(h => h.startsWith(heroName))) {
+      alert('Hero sudah dipilih!');
+      return;
+    }
+
+    // Check if lane is already taken
+    const laneExists = team.some(h => h.endsWith(`-${lane}`));
+    if (laneExists) {
+      alert(`Lane ${lane} sudah ada! Pilih lane lain.`);
+      return;
+    }
+
+    // Add to team
+    setTeam([...team, `${heroName}-${lane}`]);
+    setSearchQuery('');
+  };
+
   const addHeroToList = (heroName: string, listType: 'banned' | 'enemy' | 'team') => {
     const lists = { banned, enemy, team };
     const setters = { banned: setBanned, enemy: setEnemy, team: setTeam };
@@ -112,8 +172,8 @@ export default function DraftPage() {
     }
 
     if (listType === 'team') {
-      // For team, add with lane specification
-      setTeam([...team, `${heroName}-${userLane}`]);
+      alert('Untuk team, ketik: hero lane (contoh: miya gold)');
+      return;
     } else {
       setters[listType]([...lists[listType], heroName]);
     }
@@ -250,10 +310,34 @@ export default function DraftPage() {
                 </button>
               </div>
 
+              {/* Lane Selector for Team */}
+              {activeTab === 'team' && (
+                <div className="mb-3">
+                  <label className="text-xs text-slate-400 mb-2 block">Select Lane:</label>
+                  <div className="grid grid-cols-5 gap-2">
+                    {LANES.map(lane => (
+                      <button
+                        key={lane}
+                        onClick={() => setTeamLaneInput(lane)}
+                        className={`px-2 py-2 rounded text-xs font-medium transition-all ${
+                          teamLaneInput === lane
+                            ? `${LANE_COLORS[lane as keyof typeof LANE_COLORS]} text-white shadow-lg`
+                            : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                        }`}
+                        disabled={team.some(h => h.endsWith(`-${lane}`))}
+                      >
+                        {LANE_LABELS[lane as keyof typeof LANE_LABELS]}
+                        {team.some(h => h.endsWith(`-${lane}`)) && ' ✓'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Hero Search */}
               <input
                 type="text"
-                placeholder="Search hero to add..."
+                placeholder={activeTab === 'team' ? "Search hero..." : "Search hero to add..."}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-4 py-2 bg-slate-700 rounded-lg text-white placeholder-slate-400 mb-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -265,12 +349,21 @@ export default function DraftPage() {
                   {filteredHeroes.slice(0, 10).map(hero => (
                     <button
                       key={hero.name}
-                      onClick={() => addHeroToList(hero.name, activeTab)}
+                      onClick={() => activeTab === 'team' ? addHeroWithLane(hero.name, teamLaneInput) : addHeroToList(hero.name, activeTab)}
                       className="w-full text-left px-3 py-2 hover:bg-slate-700 transition-colors text-white"
                     >
-                      <div className="font-medium capitalize">{hero.name}</div>
-                      <div className="text-xs text-slate-400">
-                        {hero.roles.join(', ')} • {hero.lanes.join(', ')}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium capitalize">{hero.name}</div>
+                          <div className="text-xs text-slate-400">
+                            {hero.roles.join(', ')} • {hero.lanes.join(', ')}
+                          </div>
+                        </div>
+                        {activeTab === 'team' && (
+                          <span className={`text-xs px-2 py-1 rounded ${LANE_COLORS[teamLaneInput as keyof typeof LANE_COLORS]}`}>
+                            {teamLaneInput}
+                          </span>
+                        )}
                       </div>
                     </button>
                   ))}
