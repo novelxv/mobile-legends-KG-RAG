@@ -139,7 +139,7 @@ export default function Home() {
               </div>
             </div>
             {stats && (
-              <div className="hidden md:flex gap-3">
+              <div className="hidden md:flex gap-3 items-center">
                 <div className="card-ml px-6 py-3 card-glow">
                   <div className="text-3xl font-bold text-ml-accent glow-text">{stats.total_heroes}</div>
                   <div className="text-xs text-ml-cyan uppercase tracking-wider">Heroes</div>
@@ -148,6 +148,16 @@ export default function Home() {
                   <div className="text-3xl font-bold text-ml-blue glow-text">{stats.total_relationships}</div>
                   <div className="text-xs text-ml-cyan uppercase tracking-wider">Relations</div>
                 </div>
+                <a
+                  href="/draft"
+                  className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-xl shadow-lg hover:shadow-purple-500/50 transition-all hover:scale-105 flex items-center gap-2 border-2 border-purple-400/50"
+                >
+                  <span className="text-2xl">🎯</span>
+                  <div>
+                    <div className="text-white font-bold text-sm uppercase tracking-wider">Try Draft Pick</div>
+                    <div className="text-purple-200 text-xs">Hero Recommendations</div>
+                  </div>
+                </a>
               </div>
             )}
           </div>
