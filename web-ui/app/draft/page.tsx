@@ -3,6 +3,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+interface Toast {
+  id: number;
+  message: string;
+  type: 'success' | 'error' | 'warning' | 'info';
+}
+
 interface Hero {
   name: string;
   roles: string[];
@@ -66,10 +72,19 @@ export default function DraftPage() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'banned' | 'enemy' | 'team'>('banned');
+  const [toasts, setToasts] = useState<Toast[]>([]);
 
   useEffect(() => {
     fetchHeroes();
   }, []);
+
+  const showToast = (message: string, type: Toast['type'] = 'info') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts(prev => prev.filter(toast => toast.id !== id));
+    }, 3000);
+  };
 
   const fetchHeroes = async () => {
     try {
@@ -93,10 +108,11 @@ export default function DraftPage() {
       if (response.data.success) {
         setRecommendations(response.data.recommendations);
         setTeamAnalysis(response.data.team_analysis || null);
+        showToast('Recommendations loaded successfully!', 'success');
       }
     } catch (error: any) {
       console.error('Failed to get recommendations:', error);
-      alert(error.response?.data?.detail || 'Failed to get recommendations');
+      showToast(error.response?.data?.detail || 'Failed to get recommendations', 'error');
     } finally {
       setLoading(false);
     }
@@ -105,7 +121,7 @@ export default function DraftPage() {
   const handleTeamInput = (input: string) => {
     const parts = input.toLowerCase().split(' ').filter(p => p);
     if (parts.length !== 2) {
-      alert('Format salah! Gunakan: hero lane (contoh: miya gold)');
+      showToast('Format salah! Gunakan: hero lane (contoh: miya gold)', 'warning');
       return;
     }
 
@@ -113,27 +129,27 @@ export default function DraftPage() {
     
     // Validate lane
     if (!LANES.includes(lane)) {
-      alert(`Lane tidak valid! Gunakan: ${LANES.join(', ')}`);
+      showToast(`Lane tidak valid! Gunakan: ${LANES.join(', ')}`, 'warning');
       return;
     }
 
     // Check if hero exists
     const heroExists = heroes.some(h => h.name.toLowerCase() === heroName);
     if (!heroExists) {
-      alert('Hero tidak ditemukan!');
+      showToast('Hero tidak ditemukan!', 'error');
       return;
     }
 
     // Check if hero is already in any list
     if (banned.includes(heroName) || enemy.includes(heroName) || team.some(h => h.startsWith(heroName))) {
-      alert('Hero sudah dipilih!');
+      showToast('Hero sudah dipilih!', 'warning');
       return;
     }
 
     // Check if lane is already taken
     const laneExists = team.some(h => h.endsWith(`-${lane}`));
     if (laneExists) {
-      alert(`Lane ${lane} sudah ada! Pilih lane lain.`);
+      showToast(`Lane ${lane} sudah ada! Pilih lane lain.`, 'warning');
       return;
     }
 
@@ -145,20 +161,21 @@ export default function DraftPage() {
   const addHeroWithLane = (heroName: string, lane: string) => {
     // Check if hero is already in any list
     if (banned.includes(heroName) || enemy.includes(heroName) || team.some(h => h.startsWith(heroName))) {
-      alert('Hero sudah dipilih!');
+      showToast('Hero sudah dipilih!', 'warning');
       return;
     }
 
     // Check if lane is already taken
     const laneExists = team.some(h => h.endsWith(`-${lane}`));
     if (laneExists) {
-      alert(`Lane ${lane} sudah ada! Pilih lane lain.`);
+      showToast(`Lane ${lane} sudah ada! Pilih lane lain.`, 'warning');
       return;
     }
 
     // Add to team
     setTeam([...team, `${heroName}-${lane}`]);
     setSearchQuery('');
+    showToast(`${heroName} added to team as ${lane}!`, 'success');
   };
 
   const addHeroToList = (heroName: string, listType: 'banned' | 'enemy' | 'team') => {
@@ -167,15 +184,17 @@ export default function DraftPage() {
 
     // Check if hero is already in any list
     if (banned.includes(heroName) || enemy.includes(heroName) || team.some(h => h.startsWith(heroName))) {
-      alert('Hero already selected!');
+      showToast('Hero already selected!', 'warning');
       return;
     }
 
     if (listType === 'team') {
-      alert('Untuk team, ketik: hero lane (contoh: miya gold)');
+      showToast('Untuk team, ketik: hero lane (contoh: miya gold)', 'info');
       return;
     } else {
       setters[listType]([...lists[listType], heroName]);
+      const listNames = { banned: 'banned', enemy: 'enemy' };
+      showToast(`${heroName} added to ${listNames[listType]} list!`, 'success');
     }
 
     setSearchQuery('');
@@ -557,6 +576,40 @@ export default function DraftPage() {
           </div>
         </div>
       </main>
+
+      {/* Toast Notifications */}
+      <div className="fixed top-4 right-4 z-50 space-y-2">
+        {toasts.map(toast => (
+          <div
+            key={toast.id}
+            className={`min-w-[300px] px-6 py-4 rounded-lg shadow-2xl backdrop-blur-md border-2 animate-slide-in-right flex items-start gap-3 ${
+              toast.type === 'success'
+                ? 'bg-green-500/90 border-green-400 text-white'
+                : toast.type === 'error'
+                ? 'bg-red-500/90 border-red-400 text-white'
+                : toast.type === 'warning'
+                ? 'bg-yellow-500/90 border-yellow-400 text-white'
+                : 'bg-blue-500/90 border-blue-400 text-white'
+            }`}
+          >
+            <div className="text-2xl">
+              {toast.type === 'success' ? '✓' : toast.type === 'error' ? '✕' : toast.type === 'warning' ? '⚠' : 'ℹ'}
+            </div>
+            <div className="flex-1">
+              <p className="font-medium">{toast.message}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer */}
+      <footer className="py-3 border-t border-ml-accent/20 backdrop-blur-sm bg-ml-primary/30 relative">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm text-ml-light/70">
+            IF4070 Representasi Pengetahuan dan Penalaran
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

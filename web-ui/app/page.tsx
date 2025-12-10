@@ -323,6 +323,15 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="py-3 border-t border-ml-accent/20 backdrop-blur-sm bg-ml-primary/30">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm text-ml-light/70">
+            IF4070 Representasi Pengetahuan dan Penalaran
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
