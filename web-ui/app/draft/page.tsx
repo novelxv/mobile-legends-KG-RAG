@@ -152,24 +152,52 @@ export default function DraftPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Back to Chat Button */}
-        <div className="mb-6">
-          <a
-            href="/"
-            className="inline-flex items-center space-x-2 px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 backdrop-blur-sm rounded-lg border border-purple-500/30 hover:border-purple-500/50 text-white transition-all"
-          >
-            <span>←</span>
-            <span>Back to Chat</span>
-          </a>
-        </div>
-        
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">🎯 Draft Pick Assistant</h1>
-          <p className="text-purple-300">Get AI-powered hero recommendations for your draft</p>
-        </div>
+    <div className="min-h-screen relative">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-ml-blue/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-ml-accent/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
+      </div>
 
+      {/* Header */}
+      <header className="relative border-b-2 border-ml-accent/30 backdrop-blur-md bg-ml-primary/50 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-ml-blue/10 via-transparent to-ml-accent/10"></div>
+        <div className="container mx-auto px-6 py-6 relative">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-ml-accent via-yellow-500 to-ml-orange 
+                            flex items-center justify-center shadow-ml animate-glow overflow-hidden">
+                <img src="/mobile-legends-logo.png" alt="Mobile Legends Logo" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h1 className="text-4xl md:text-5xl font-heading font-bold glow-text bg-gradient-to-r from-ml-accent via-yellow-300 to-ml-accent bg-clip-text text-transparent">
+                  MOBILE LEGENDS
+                </h1>
+                <p className="text-ml-cyan text-sm md:text-base font-semibold tracking-wide uppercase">
+                  Draft Pick Assistant with AI-powered hero recommendations
+                </p>
+              </div>
+            </div>
+            <div className="hidden md:flex gap-3 items-center">
+              <a
+                href="/"
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 rounded-xl shadow-lg hover:shadow-blue-500/50 transition-all hover:scale-105 flex items-center gap-2 border-2 border-blue-400/50"
+              >
+                <span className="text-xl">←</span>
+                <div>
+                  <div className="text-white font-bold text-sm uppercase tracking-wider">Back to Chat</div>
+                  <div className="text-blue-200 text-xs">AI Assistant</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        {/* Shine effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-ml-accent to-transparent"></div>
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-6 max-w-7xl relative">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Panel - Draft State */}
           <div className="lg:col-span-1 space-y-4">
@@ -435,7 +463,7 @@ export default function DraftPage() {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
