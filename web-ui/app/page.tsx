@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 interface Message {
   id: number;
   type: 'user' | 'ai';
@@ -39,7 +41,7 @@ export default function Home() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('https://mobile-legends-kg-rag.fly.dev/stats');
+      const response = await axios.get(`${API_URL}/stats`);
       setStats(response.data);
     } catch (error) {
       console.error('Failed to fetch stats:', error);
@@ -61,7 +63,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://mobile-legends-kg-rag.fly.dev/chat', {
+      const response = await axios.post(`${API_URL}/chat`, {
         question: input,
       });
 

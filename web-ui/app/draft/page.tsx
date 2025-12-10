@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 interface Toast {
   id: number;
   message: string;
@@ -88,7 +90,7 @@ export default function DraftPage() {
 
   const fetchHeroes = async () => {
     try {
-      const response = await axios.get('https://mobile-legends-kg-rag.fly.dev/draft/heroes');
+      const response = await axios.get(`${API_URL}/draft/heroes`);
       setHeroes(response.data.heroes);
     } catch (error) {
       console.error('Failed to fetch heroes:', error);
@@ -98,7 +100,7 @@ export default function DraftPage() {
   const getDraftRecommendations = async () => {
     setLoading(true);
     try {
-      const response = await axios.post<DraftResponse>('https://mobile-legends-kg-rag.fly.dev/draft', {
+      const response = await axios.post<DraftResponse>(`${API_URL}/draft`, {
         banned,
         enemy,
         team,
