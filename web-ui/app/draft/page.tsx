@@ -88,7 +88,7 @@ export default function DraftPage() {
 
   const fetchHeroes = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/draft/heroes');
+      const response = await axios.get('https://mobile-legends-kg-rag.fly.dev/draft/heroes');
       setHeroes(response.data.heroes);
     } catch (error) {
       console.error('Failed to fetch heroes:', error);
@@ -98,7 +98,7 @@ export default function DraftPage() {
   const getDraftRecommendations = async () => {
     setLoading(true);
     try {
-      const response = await axios.post<DraftResponse>('http://localhost:8000/draft', {
+      const response = await axios.post<DraftResponse>('https://mobile-legends-kg-rag.fly.dev/draft', {
         banned,
         enemy,
         team,

@@ -39,7 +39,7 @@ export default function Home() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/stats');
+      const response = await axios.get('https://mobile-legends-kg-rag.fly.dev/stats');
       setStats(response.data);
     } catch (error) {
       console.error('Failed to fetch stats:', error);
@@ -61,7 +61,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/chat', {
+      const response = await axios.post('https://mobile-legends-kg-rag.fly.dev/chat', {
         question: input,
       });
 
